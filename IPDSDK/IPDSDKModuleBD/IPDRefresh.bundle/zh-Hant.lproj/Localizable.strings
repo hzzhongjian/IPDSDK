@@ -1,0 +1,16 @@
+"IPDRefreshHeaderIdleText" = "下拉可以刷新";
+"IPDRefreshHeaderPullingText" = "鬆開立即刷新";
+"IPDRefreshHeaderRefreshingText" = "正在刷新數據中...";
+
+"IPDRefreshAutoFooterIdleText" = "點擊或上拉加載更多";
+"IPDRefreshAutoFooterRefreshingText" = "正在加載更多的數據...";
+"IPDRefreshAutoFooterNoMoreDataText" = "已經全部加載完畢";
+
+"IPDRefreshBackFooterIdleText" = "上拉可以加載更多";
+"IPDRefreshBackFooterPullingText" = "鬆開立即加載更多";
+"IPDRefreshBackFooterRefreshingText" = "正在加載更多的數據...";
+"IPDRefreshBackFooterNoMoreDataText" = "已經全部加載完畢";
+
+"IPDRefreshHeaderLastTimeText" = "最後更新：";
+"IPDRefreshHeaderDateTodayText" = "今天";
+"IPDRefreshHeaderNoneLastDateText" = "無記錄";

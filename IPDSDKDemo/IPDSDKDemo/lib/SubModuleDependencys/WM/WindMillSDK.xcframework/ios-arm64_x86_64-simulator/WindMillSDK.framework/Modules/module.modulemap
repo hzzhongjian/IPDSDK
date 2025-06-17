@@ -1,0 +1,6 @@
+framework module WindMillSDK {
+  umbrella header "WindMillSDK.h"
+
+  export *
+  module * { export * }
+}

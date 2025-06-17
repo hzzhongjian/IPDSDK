@@ -1,0 +1,6 @@
+framework module IPDSDK {
+  umbrella header "IPDSDK.h"
+  export *
+
+  module * { export * }
+}

@@ -1,0 +1,181 @@
+
+<html>
+
+<head>
+    <title>JSSdk测试页</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <style>
+        button {
+            width: 96vw;
+            margin-left: 2vw;
+            margin-right: 2vw;
+            margin-top: 2vw;
+            margin-bottom: 2vw;
+            padding-top: 2vw;
+            padding-bottom: 2vw;
+        }
+
+        #input {
+            width: 96vw;
+            margin-left: 2vw;
+            margin-right: 2vw;
+            margin-top: 2vw;
+            margin-bottom: 2vw;
+            padding-top: 2vw;
+            padding-bottom: 2vw;
+        }
+    </style>
+</head>
+
+<body style="margin: 0;">
+    <h2>JSSdk</h2>
+    <button onclick="getConfig()">获取配置 getConfig()</button>
+    <button onclick="getUser()">获取用户信息 getUser()</button>
+
+    <h2>JSAdSdk</h2>
+    <button onclick="checkAndRequestPermissions()">检查和请求定位权限 checkAndRequestPermissions()</button>
+    <button onclick="loadAd('J8595471688', 'interstitialad')">插全屏 loadAd()</button>
+    <button onclick="loadAd('J4008472476', 'rewardvideo')">激励视频 loadAd()</button>
+    <button onclick="loadAd('J3511636631', 'wechat_mini')">小程序 loadAd()</button>
+    <button onclick="loadAd('zjad_h500001iostest', 'h5ad')">拉起其他H5</button>
+    <button onclick="loadAd('K90010005', 'contentad')" style="display: none;" id="contentAd">视频内容任务
+    </button>
+    <button onclick="loadAd('J6316865941', 'news_ad')" style="display: none;" id="newsAd">新闻资讯任务
+    </button>
+<!--    <button onclick="loadAd('J3023431556', 'novelad')" style="display: none;" id="novelAd">小说任务</button>-->
+
+    <h2>JSAppSdk</h2>
+    <button onclick="hasInstallApk()">判断安装 hasInnstallApk(packageName)</button>
+    <button onclick="wakeAppByPkgName()">通过包名和Launcher拉起应用 wakeAppByPkgName(packageName,
+        launcherClassName)
+    </button>
+    <button onclick="wakeAppBySchema()">通过Schema拉起应用 wakeAppBySchema(schema)</button>
+
+    <br>
+    <input id="input" placeholder="包名、Deeplink、广告位ID" />
+</body>
+<script src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
+<script>
+    // 初始化vConsole
+    window.vConsole = new window.VConsole({
+        defaultPlugins: ['system', 'network', 'element', 'storage', 'performance'], // 可以在此设定要默认加载的面板
+        maxLogNumber: 1000,
+        onReady: function () {
+
+        },
+        onClearLog: function () {
+            //console.log('on clearLog');
+        }
+    });
+
+    window.onload = function () {
+        // 获取支持的广告类型
+        let adTypeArray = JSON.parse(ZjJSSdk.getSupportAdTypeArray())
+        let str = "支持的广告类型包含:\n"
+        for (let i = 0; i < adTypeArray.length; i++) {
+            let currAdType = adTypeArray[i]
+            str += currAdType + "\n"
+            if (currAdType == "contentad") {
+                document.getElementById("contentAd").style.display = "inline-block"
+            } else if (currAdType == "news_ad") {
+                document.getElementById("newsAd").style.display = "inline-block"
+            } else if (currAdType == "novelad") {
+                document.getElementById("novelAd").style.display = "inline-block"
+            }
+        }
+        console.log(str)
+    }
+
+    // 获取配置信息
+    function getConfig() {
+        let ret = JSON.parse(ZjJSSdk.getConfig())
+        console.log("配置信息: APPId = " + ret.appId + " & 当前广告位Id = " + ret.adId)
+    }
+
+    // 获取用户信息
+    function getUser() {
+        let ret = JSON.parse(ZjJSSdk.getUser())
+        console.log("用户信息: 用户ID = " + ret.userID + " & 用户名 = " + ret.userName + " & 头像URL = " + ret.userAvatar + " & 设备ID = " + ret.deviceid + " & 拓展参数 = " + ret.ext + " & ptype = " + ret.ptype)
+    }
+
+    // 检查并请求定位权限
+    function checkAndRequestPermissions() {
+        let ret = ZjJSAdSdk.checkAndRequestPermissions()
+        // 未授权时会直接申请，并异步回调结果
+        console.log("当前定位权限授权情况为: " + (ret ? "已授权" : "未授权，正在申请"))
+    }
+
+    // 加载广告
+    function loadAd(posId, type) {
+        let inputPosId = getInput()
+        if (inputPosId != null && inputPosId.trim().length > 0) {
+            posId = inputPosId
+        }
+        ZjJSAdSdk.loadAd(posId, type)
+    }
+
+    // ADSdk回调方法
+    function zjJSAdSdkCallBack(type, msg) {
+        console.log('zjJSAdSdkCallBack...type = ' + type + ' msg = ' + msg)
+        if (type == "permission") {
+            // 请求定位权限的异步回调
+            console.log("请求定位权限的异步回调结果为: " + (msg == "true" ? "已授权" : "未授权"))
+        } else if (type == "onZjAdLoaded" || type == "onZjAdVideoCached") {
+            console.log("广告加载成功，可在此回调后进行广告展示(新版本自动展示)")
+        } else if (type == "onZjAdShow") {
+            console.log("广告成功展示")
+        } else if (type == "onZjAdClick" || type == "onZjAdClicked") {
+            console.log("广告被点击")
+        } else if (type == "onZjAdReward") {
+            console.log("广告得到奖励(激励视频、插屏、全屏视频)，当前广告位为: " + msg)
+        } else if (type == "onZjAdClose" || type == "onZjAdClosed") {
+            console.log("广告页面关闭")
+        } else if (type == "onZjAdError") {
+            console.log("广告加载出错，错误信息为: " + msg)
+        } else if (type == "close") {
+            // 新闻、小说、视频内容任务关闭回调，包含主动关闭和拉起页面出错后关闭
+            let ret = JSON.parse(msg)
+            switch (ret.code) {
+                case 0:
+                    console.log("任务页正常关闭，任务" + (ret.task ? "已" : "未") + "完成")
+                    break
+                case -1:
+                    console.log("任务页异常关闭，初始化页面布局失败，任务" + (ret.task ? "已" : "未") + "完成" + " 错误信息为: " + ret.msg)
+                    break
+                case -2:
+                    console.log("任务页异常关闭，解析参数异常(如广告位不存在)，任务" + (ret.task ? "已" : "未") + "完成" + " 错误信息为: " + ret.msg)
+                    break
+                case -3:
+                    console.log("任务页异常关闭，Fragment反射展示时失败，任务" + (ret.task ? "已" : "未") + "完成" + " 错误信息为: " + ret.msg)
+                    break
+                case -4:
+                    console.log("任务页异常关闭，加载任务提示UI组件出错,任务" + (ret.task ? "已" : "未") + "完成" + " 错误信息为: " + ret.msg)
+                    break
+                default:
+                    console.log("任务页异常关闭，SDK回调错误码为: " + ret.code + " 错误信息为: " + ret.msg + "，任务" + (ret.task ? "已" : "未") + "完成")
+            }
+        }
+    }
+
+    // 判断是否安装应用
+    function hasInstallApk() {
+        console.log("支付宝安装情况为: " + (ZjJSAppSdk.hasInstallApk("com.eg.android.AlipayGphone") ? "已安装" : "未安装"))
+    }
+
+    // 通过Launcher拉起应用
+    function wakeAppByPkgName() {
+        ZjJSAppSdk.wakeAppByPkgName(getInput(), "")
+    }
+
+    // 通过DeepLink拉起应用
+    function wakeAppBySchema() {
+        ZjJSAppSdk.wakeAppBySchema(getInput())
+    }
+
+    function getInput() {
+        document.getElementById("input").value
+    }
+
+</script>
+
+</html>

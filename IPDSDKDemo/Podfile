@@ -1,0 +1,24 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'IPDSDKDemo' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for IPDSDKDemo
+  
+  pod 'IPDSDK', :path => '../'
+  
+#  pod 'IPDSDK/IPDSDKModuleGDT', :path => '../'#优量汇广告
+#  pod 'IPDSDK/IPDSDKModuleCSJ', :path => '../'#穿山甲广告
+#  pod 'IPDSDK/IPDSDKModuleKS', :path => '../'#快手广告
+#  pod 'IPDSDK/IPDSDKModuleMTG', :path => '../'#MTG广告
+#  pod 'IPDSDK/IPDSDKModuleSIG', :path => '../'#Sigmob广告
+#  pod 'IPDSDK/IPDSDKModuleBD', :path => '../'#百度广告
+#  pod 'IPDSDK/IPDSDKModuleBeiZi', :path => '../'#倍孜广告
+#  pod 'IPDSDK/IPDSDKModuleTanX', :path => '../'#TanX广告
+#  pod 'IPDSDK/IPDSDKModuleQM', :path => '../'#趣盟广告
+#  pod 'IPDSDK/IPDSDKModuleOCTOPUS', :path => '../'#章鱼广告
+
+  
+end
